@@ -1,0 +1,23 @@
+from cmath import nan
+import os, glob
+import pandas as pd 
+
+games_files = glob.glob(os.path.join(os.getcwd(), 'games', '*.EVE'))
+games_files.sort()
+
+game_frames = []
+for game_file in games_files:
+    game_frame = pd.read_csv(game_file, names=['type', 'multi2', 'multi3', 'multi4', 'multi5', 'multi6', 'event'])
+    game_frames.append(game_frame)
+    games = pd.concat(game_frames)
+    pd.dataframe.loc['row condition', ['multi5']] = ''
+    identifiers = pd.dataframe[games['multi2']].str.extract(r'(.LS(\d{4})\d{5})')
+
+    identifiers = identifiers.fillna(method='ffill')
+    identifiers['columns'] = ['game_id', 'year']
+
+    games = pd.concat([games, identifiers], axis=1, sort=False)
+    games = pd.fillna(nan, ' ')
+    pd.Categorical(games.loc[:])
+    print(pd.head())
+
