@@ -17,8 +17,7 @@ r'^HR(.*)': 'hr'
 hit_type = hits['event'].replace(replacements, regex=True)
 
 hits = hits.assign(hit_type=hit_type)
-hits = hits.groupby(['inning', 'hit_type']).size()
-hits = hits.reset_index(name='count')
+hits = hits.groupby(['inning', 'hit_type']).size().reset_index(name='count')
 
 hits['hit_type'] = pd.Categorical(hits['hit_type'], ['single', 'double', 'triple', 'hr'])
 
